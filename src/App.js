@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Table from './components/Table';
-import { Layout } from 'antd';
+import AddForm from './components/Form';
+import { Layout, Row, Col } from 'antd';
 import './App.css';
 
 const { Header, Footer, Content } = Layout;
@@ -12,7 +13,12 @@ class App extends Component {
       <Layout className="layout">
         <Header />
         <Content>
-          <Table />
+          <Row type="flex" justify="center">
+            <Col span={20}>
+              <AddForm />
+              <Table />
+            </Col>
+         </Row>
         </Content>
         <Footer />
       </Layout>
