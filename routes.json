@@ -1,0 +1,3 @@
+{
+  "/invoices/:id": "/invoices?id=:id"
+}
