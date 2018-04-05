@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import logo from './logo.svg';
+import Table from './components/Table';
+import { Layout } from 'antd';
 import './App.css';
 
+const { Header, Footer, Content } = Layout;
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Layout className="layout">
+        <Header />
+        <Content>
+          <Table />
+        </Content>
+        <Footer />
+      </Layout>
     );
   }
 }
-
 export default connect()(App);

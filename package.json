@@ -12,7 +12,8 @@
     "redux-devtools": "^3.4.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "PORT=8888 react-app-rewired start",
+    "startdb": "json-server --ro false --watch db.json",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject"
