@@ -3,10 +3,9 @@ import{ connect } from 'react-redux';
 import { addItem, editItem, editStatus, newStatus } from '../store/actions';
 import { Row, Col, Input, Icon, DatePicker, Button } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
 
 const { TextArea } = Input;
-
-const block = {display: 'block'}
 
 class AddForm extends Component {
   constructor(props) {
@@ -24,9 +23,7 @@ class AddForm extends Component {
 
   generateNumber = () => {
     let numb = Math.trunc(Math.random() * Math.floor(1000000))
-    let form = Object.assign({}, this.state.form)
-    form.number = numb
-    this.setState({form})
+    return numb
   }
 
   hadleChange = (field, event) => {
@@ -42,12 +39,12 @@ class AddForm extends Component {
   }
 
   setInitial = () => {
-    this.generateNumber()
     this.setState({
       form: {
         dueDate: null,
         dateSupply: null,
-        comment: ''
+        comment: '',
+        number: this.generateNumber()
       }
     })
   }
@@ -67,19 +64,39 @@ class AddForm extends Component {
     }
   }
 
+  getRandomText = length => {
+    if (!length) length = 18
+    return btoa(Math.random()).toLowerCase().substring(0, length)
+  }
+
+  getDirection = () => {
+    return `${this.getRandomText(8)}-${this.getRandomText(4)}-${this.getRandomText(4)}-${this.getRandomText(8)}`
+  }
+
   addNew = () => {
-    console.log('new form')
    this.props.newStatus(true)
   }
 
   saveBtn = () => {
+    let form = {
+      id: this.getRandomText(24),
+      direction: this.getDirection(),
+      date_created: moment().format('DD MMMM YYYY'),
+      number: this.state.form.number,
+      date_due: moment(this.state.form.dateDue).format('DD MMMM YYYY'),
+      date_supply: moment(this.state.form.dateSupply).format('DD MMMM YYYY'),
+      comment: this.state.form.comment
+    }
     axios({
       method: 'post',
       url: 'http://127.0.0.1:3000/invoices/',
       headers: { 'Content-Type': 'application/json' },
-      data: {}
+      data: form
     })
-      .then(data => console.log('save'))
+      .then(data => {
+        this.props.add(form)
+        this.props.newStatus(false)
+      })
   }
 
   render() {
@@ -106,7 +123,7 @@ class AddForm extends Component {
                 Comment:
                  <TextArea autosize onChange={e => this.hadleChange('comment', e)} value={this.state.form.comment} />
               </label>
-              <Button type="primary">Save</Button>
+              <Button type="primary" onClick={this.saveBtn}>Save</Button>
             </form>
           </Col>
         ) : (
