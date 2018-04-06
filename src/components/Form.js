@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import{ connect } from 'react-redux'; 
 import { addItem, editItem, editStatus, newStatus } from '../store/actions';
 import { Row, Col, Input, Icon, DatePicker, Button } from 'antd';
+import axios from 'axios';
 
 const { TextArea } = Input;
 
@@ -69,6 +70,16 @@ class AddForm extends Component {
   addNew = () => {
     console.log('new form')
    this.props.newStatus(true)
+  }
+
+  saveBtn = () => {
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:3000/invoices/',
+      headers: { 'Content-Type': 'application/json' },
+      data: {}
+    })
+      .then(data => console.log('save'))
   }
 
   render() {
