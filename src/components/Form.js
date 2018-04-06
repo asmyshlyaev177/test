@@ -25,22 +25,13 @@ class AddForm extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.statusEdit && JSON.stringify(nextProps.form) !== JSON.stringify(prevState.form)) {
-<<<<<<< HEAD
-      return {
-=======
       return {...nextProps,
->>>>>>> 5368c9aee404195243a121349c8bd4b8e4575e60
         form: {
           id: nextProps.form.id,
           direction: nextProps.form.direction,
           number: nextProps.form.number,
-<<<<<<< HEAD
-          dateDue: moment(nextProps.form.date_due).isValid() ? moment(nextProps.form.date_due) : moment(),
-          dateSupply: moment(nextProps.form.date_supply).isValid() ? moment(nextProps.form.date_supply) : moment(),
-=======
           dateDue: moment(nextProps.form.date_due),
           dateSupply: moment(nextProps.form.date_supply),
->>>>>>> 5368c9aee404195243a121349c8bd4b8e4575e60
           comment: nextProps.form.comment
         }
       }
@@ -105,13 +96,8 @@ class AddForm extends Component {
     if (this.props.statusEdit) {
       form.id = this.props.form.id
       form.number = this.state.form.number
-<<<<<<< HEAD
       form.date_supply = moment(this.state.form.dateSupply).isValid() ? moment(this.state.form.dateSupply).format('DD MMMM YYYY') : ''
       form.date_due = moment(this.state.form.dateDue).isValid() ? moment(this.state.form.dateDue).format('DD MMMM YYYY') : ''
-=======
-      form.date_supply = moment(this.state.form.dateSupply).format('DD MMMM YYYY')
-      form.date_due = moment(this.state.form.dateDue).format('DD MMMM YYYY')
->>>>>>> 5368c9aee404195243a121349c8bd4b8e4575e60
       form.direction = this.state.form.direction
       form.comment = this.state.form.comment
       form.date_created = this.props.form.date_created
@@ -150,17 +136,7 @@ class AddForm extends Component {
                 <span style={block}>Number:</span>
                 <Input addonAfter={<Icon type="setting" />}
                  onChange={e => this.hadleChange('number', e)} value={this.state.form.number} />
-<<<<<<< HEAD
                 <span style={block}>Supply Date:</span>
-=======
-              </label>
-              <label>
-                Invoice Date:
-                 <DatePicker onChange={(d, s) => this.hadleDateChange('dateDue', d, s)} value={this.state.form.dateDue} />
-              </label>
-              <label>
-                Supply Date:
->>>>>>> 5368c9aee404195243a121349c8bd4b8e4575e60
                  <DatePicker onChange={(d, s) => this.hadleDateChange('dateSupply', d, s)} value={this.state.form.dateSupply} />
           </Col>
           <Col span={12}>
