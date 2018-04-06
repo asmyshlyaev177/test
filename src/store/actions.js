@@ -21,3 +21,11 @@ export function editStatus(payload) {
 export function newStatus(payload) {
   return {type: 'NEW_STATUS', payload: payload}
 }
+
+export function saveEdited(payload) {
+  return {type: 'SAVE_EDITED', payload: payload}
+}
+
+export function setForm(payload) {
+  return {type: 'SET_FORM', payload: payload}
+}

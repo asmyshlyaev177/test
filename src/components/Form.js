@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import{ connect } from 'react-redux'; 
-import { addItem, editItem, editStatus, newStatus } from '../store/actions';
+import { saveEdited, addItem, editItem, editStatus, newStatus } from '../store/actions';
 import { Row, Col, Input, Icon, DatePicker, Button } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
@@ -13,11 +13,28 @@ class AddForm extends Component {
     this.state = {
       form: {
         number: 0,
-        dueDate: null,
+        dateDue: null,
         dateSupply: null,
         comment: ''
       },
       active: false
+    }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.statusEdit && JSON.stringify(nextProps.form) !== JSON.stringify(prevState.form)) {
+      return {...nextProps,
+        form: {
+          id: nextProps.form.id,
+          direction: nextProps.form.direction,
+          number: nextProps.form.number,
+          dateDue: moment(nextProps.form.date_due),
+          dateSupply: moment(nextProps.form.date_supply),
+          comment: nextProps.form.comment
+        }
+      }
+    } else {
+      return null
     }
   }
 
@@ -49,20 +66,6 @@ class AddForm extends Component {
     })
   }
 
-  componentWillMount() {
-    if (this.props.editForm && this.props.form) {
-      this.seState({
-        form: {
-          number: this.props.form.number,
-          dueDate: this.props.form.dueDate,
-          dateSupply: this.props.form.dateDupply,
-          comment: this.props.form.comment
-        }
-      })
-    } else {
-      this.setInitial()
-    }
-  }
 
   getRandomText = length => {
     if (!length) length = 18
@@ -74,29 +77,51 @@ class AddForm extends Component {
   }
 
   addNew = () => {
-   this.props.newStatus(true)
+    this.setInitial()
+    this.props.newStatus(true)
   }
 
   saveBtn = () => {
-    let form = {
-      id: this.getRandomText(24),
-      direction: this.getDirection(),
-      date_created: moment().format('DD MMMM YYYY'),
-      number: this.state.form.number,
-      date_due: moment(this.state.form.dateDue).format('DD MMMM YYYY'),
-      date_supply: moment(this.state.form.dateSupply).format('DD MMMM YYYY'),
-      comment: this.state.form.comment
-    }
-    axios({
-      method: 'post',
-      url: 'http://127.0.0.1:3000/invoices/',
-      headers: { 'Content-Type': 'application/json' },
-      data: form
-    })
-      .then(data => {
-        this.props.add(form)
-        this.props.newStatus(false)
+      let form = {
+        id: this.getRandomText(24),
+        direction: this.getDirection(),
+        date_created: moment().format('DD MMMM YYYY'),
+        number: this.state.form.number,
+        date_due: moment(this.state.form.dateDue).format('DD MMMM YYYY'),
+        date_supply: moment(this.state.form.dateSupply).format('DD MMMM YYYY'),
+        comment: this.state.form.comment
+      }
+    if (this.props.statusEdit) {
+      form.id = this.props.form.id
+      form.number = this.state.form.number
+      form.date_supply = moment(this.state.form.dateSupply).format('DD MMMM YYYY')
+      form.date_due = moment(this.state.form.dateDue).format('DD MMMM YYYY')
+      form.direction = this.state.form.direction
+      form.comment = this.state.form.comment
+      form.date_created = this.props.form.date_created
+
+      axios({
+        method: 'put',
+        url: `http://127.0.0.1:3000/invoices/${form.id}`,
+        headers: { 'Content-Type': 'application/json' },
+        data: form
       })
+        .then(data => {
+          this.props.saveEdited(form)
+          this.props.editStatus(false)
+        })
+    } else {
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:3000/invoices/',
+        headers: { 'Content-Type': 'application/json' },
+        data: form
+      })
+        .then(data => {
+          this.props.add(form)
+          this.props.newStatus(false)
+        })
+    }
   }
 
   render() {
@@ -113,7 +138,7 @@ class AddForm extends Component {
               </label>
               <label>
                 Invoice Date:
-                 <DatePicker onChange={(d, s) => this.hadleDateChange('dueDate', d, s)} value={this.state.form.dueDate} />
+                 <DatePicker onChange={(d, s) => this.hadleDateChange('dateDue', d, s)} value={this.state.form.dateDue} />
               </label>
               <label>
                 Supply Date:
@@ -142,12 +167,16 @@ const mapStateToProps = state => {
     invoices: state.invoices,
     statusNew: state.statusNew,
     statusEdit: state.statusEdit,
+    formIndex: state.formIndex,
     form: state.form
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    saveEdited: payload => {
+      dispatch(saveEdited(payload))
+    },
     editStatus: payload => {
       dispatch(editStatus(payload))
     },
@@ -157,6 +186,9 @@ const mapDispatchToProps = dispatch => {
     add: payload => {
       dispatch(addItem(payload)) 
     },
+    editItem: (item, ind) => {
+      dispatch(editItem(item, ind))
+    }
   }
 }
 

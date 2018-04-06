@@ -1,7 +1,7 @@
 import { Table, Button } from 'antd';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { editItem, loadItems, removeItem } from '../store/actions';
+import { editStatus, setForm, loadItems, removeItem } from '../store/actions';
 import axios from 'axios';
 
 class TableList extends Component {
@@ -39,7 +39,9 @@ class TableList extends Component {
   }
 
   edit = item => {
-    this.props.editItem(Object.assign({}, item))
+    let index = this.props.invoices.indexOf(item)
+    this.props.setForm(item, index)
+    this.props.editStatus(true)
   }
 
   render() {
@@ -65,12 +67,15 @@ const mapDispatchToProps = dispatch => {
     load: payload => {
       dispatch(loadItems(payload))
     },
+    setForm: (item, index) => {
+      dispatch(setForm({form: item, formIndex: index}))
+    },
     removeItem: id => {
       dispatch(removeItem(id))
     },
-    editItem: id => {
-      dispatch(editItem(id))
-    }
+    editStatus: payload => {
+      dispatch(editStatus(payload))  
+    },
   }
 }
 
