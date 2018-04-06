@@ -46,8 +46,8 @@ class TableList extends Component {
 
   render() {
     return (
-      <div>
-        <h4>Middle size table</h4>
+      <div style={{padding: '20px', background: '#fff', margin: '10px', border: '1px gray solid'}}>
+        <h4>Invoices</h4>
         <Table pagination={false} columns={this.state.columns}
          size={'middle'}
          rowKey={r => r.id} dataSource={this.props.invoices} />

@@ -14,7 +14,7 @@ class App extends Component {
         <Header />
         <Content>
           <Row justify="center">
-            <Col span={20}>
+            <Col span={20} offset={2}>
               <AddForm />
               <Table />
             </Col>

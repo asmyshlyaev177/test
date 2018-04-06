@@ -128,7 +128,7 @@ class AddForm extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{background: '#fff', padding: '20px', margin: '10px', border: '1px gray solid'}}>
         {this.props.statusEdit || this.props.statusNew ? (
         <form>
         <Row gutter={20}>
@@ -148,14 +148,18 @@ class AddForm extends Component {
           <Col>
                 <span style={block}>Comment:</span>
                  <TextArea autosize onChange={e => this.hadleChange('comment', e)} value={this.state.form.comment} />
-              <Button type="primary" onClick={this.saveBtn}>Save</Button>
+                <div className="btn" style={{paddingTop: '10px'}}>
+                  <Button type="primary" onClick={this.saveBtn}>Save</Button>
+                </div>
           </Col>
         </Row>
           </form>
         ) : (
-          <Col>
-            <Button type="primary" onClick={this.addNew}>Add new</Button>
-          </Col>
+          <div className="btn" style={{paddingTop: '10px'}}>
+            <Col>
+              <Button type="primary" onClick={this.addNew}>Add new</Button>
+            </Col>
+          </div>
           )}
       </div>
     )
