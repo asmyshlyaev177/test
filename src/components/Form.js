@@ -7,6 +7,8 @@ import moment from 'moment';
 
 const { TextArea } = Input;
 
+const block = {display: 'block'}
+
 class AddForm extends Component {
   constructor(props) {
     super(props)
@@ -127,36 +129,34 @@ class AddForm extends Component {
   render() {
     return (
       <div>
-        <Row type="flex" gutter={20}>
         {this.props.statusEdit || this.props.statusNew ? (
-          <Col span={16}>
-            <form>
-              <label>
-                Number:
+        <form>
+        <Row gutter={20}>
+          <Col span={12}>
+                <span style={block}>Number:</span>
                 <Input addonAfter={<Icon type="setting" />}
                  onChange={e => this.hadleChange('number', e)} value={this.state.form.number} />
-              </label>
-              <label>
-                Invoice Date:
-                 <DatePicker onChange={(d, s) => this.hadleDateChange('dateDue', d, s)} value={this.state.form.dateDue} />
-              </label>
-              <label>
-                Supply Date:
+                <span style={block}>Supply Date:</span>
                  <DatePicker onChange={(d, s) => this.hadleDateChange('dateSupply', d, s)} value={this.state.form.dateSupply} />
-              </label>
-              <label>
-                Comment:
-                 <TextArea autosize onChange={e => this.hadleChange('comment', e)} value={this.state.form.comment} />
-              </label>
-              <Button type="primary" onClick={this.saveBtn}>Save</Button>
-            </form>
           </Col>
+          <Col span={12}>
+                <span style={block}>Invoice Date:</span>
+                 <DatePicker onChange={(d, s) => this.hadleDateChange('dateDue', d, s)} value={this.state.form.dateDue} />
+          </Col>
+        </Row>
+        <Row gutter={20}>
+          <Col>
+                <span style={block}>Comment:</span>
+                 <TextArea autosize onChange={e => this.hadleChange('comment', e)} value={this.state.form.comment} />
+              <Button type="primary" onClick={this.saveBtn}>Save</Button>
+          </Col>
+        </Row>
+          </form>
         ) : (
-          <Col span={16}>
+          <Col>
             <Button type="primary" onClick={this.addNew}>Add new</Button>
           </Col>
           )}
-        </Row>
       </div>
     )
   }

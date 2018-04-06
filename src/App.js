@@ -13,7 +13,7 @@ class App extends Component {
       <Layout className="layout">
         <Header />
         <Content>
-          <Row type="flex" justify="center">
+          <Row justify="center">
             <Col span={20}>
               <AddForm />
               <Table />
